@@ -1,63 +1,58 @@
 {
     "applicant": {
-        "first_name": "John",
-        "last_name": "Doe",
-        "email": "jdoe.@example.com",
-        "phone": "1234567890",
-        "street_address": "123 Main St",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "jdoe@example.com",
+      "phone": "1234567890",
+      "street_address": "123 Main St",
+      "street_address_2": "",
+      "city": "Anywhere",
+      "state": "PA",
+      "zip_code": "12345",
+      "marital_status": "Single",
+      "cancer_type": "Breast Cancer",
+      "date_diagnosed": "2025-01-01",
+      "treatment_location": "Fox Chase",
+      "doctor_name": "Dr. Smith",
+      "doctor_phone": "5555555555",
+      "household": {
+        "members": [
+          {
+            "first_name": "Jane",
+            "last_name": "Doe"
+          }
+        ]
+      },
+      "total_supporting_income": 50000.00
+    },
+    "request": {
+      "statement_of_need": "Patient has been diagnosed with breast cancer and is undergoing treatment at Fox Chase. They are currently unable to work and need assistance with bills."
+    },
+    "bills": [
+      {
+        "type": "Rent",
+        "amount_requested": 400.00,
+        "company": "Landlord ABC, LLC",
+        "street_address": "999 Second St",
         "street_address_2": "",
         "city": "Anywhere",
         "state": "PA",
-        "zip": "12345",
-        "marital_status": "Single",
-        "cancer_type": "Breast Cancer",
-        "date_diagnosed": "2025-01-01",
-        "treatment_location": "Fox Chase",
-        "doctor_name": "Dr. Smith",
-        "doctor_phone": "5555555555",
-        "household":
-        {
-            "members": [
-                {
-                    "first_name": "Jane",
-                    "last_name": "Doe"
-                }
-            ]
-        },
-        "total_supporting_income": 50000.00
-    },
-    "request": {
-        "statement_of_need": "Patient has been diagnosed with breast cancer and is undergoing treatment at Fox Chase. They are currently unable to work and need assistance with bills.",
-        "amount_requested": 500.00,
-        "status": "Pending",
-        "is_test": true
-
-    },
-    "bills": [
-        {
-            "type": "Rent",
-            "amount_requested": 400.00,
-            "company": "Landlord ABC, LLC",
-            "street_address": "999 Second St",
-            "street_address_2": "",
-            "city": "Anywhere",
-            "state": "PA",
-            "zip": "12345",
-            "due_date": "2025-03-01",
-            "attachment": "https://aws.amazon.com/s3/bucket/fake_rent_bill_attachment.pdf"
-        },
-        {
-            "type": "Water",
-            "amount_requested": 100.00,
-            "company": "PA Water Co.",
-            "street_address": "333 Third St",
-            "street_address_2": "Apt. 1",
-            "city": "Anywhere",
-            "state": "PA",
-            "zip": "12345",
-            "due_date": "2025-04-01",
-            "attachment": "https://aws.amazon.com/s3/bucket/fake_water_bill_attachment.pdf"
-
-        }
+        "zip_code": "12345",
+        "due_date": "2025-03-01",
+        "attachment": "https://aws.amazon.com/s3/bucket/fake_rent_bill_attachment.pdf"
+      },
+      {
+        "type": "Water",
+        "amount_requested": 100.00,
+        "company": "PA Water Co.",
+        "street_address": "333 Third St",
+        "street_address_2": "Apt. 1",
+        "city": "Anywhere",
+        "state": "PA",
+        "zip_code": "12345",
+        "due_date": "2025-04-01",
+        "attachment": "https://aws.amazon.com/s3/bucket/fake_water_bill_attachment.pdf"
+      }
     ]
-}
+  }
+  

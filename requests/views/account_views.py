@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from ..models import CfcUser, ApprovedUser
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
@@ -54,7 +54,8 @@ def login(request):
             'last_name': user.last_name,
             'email': user.email,
             'job_title': user.job_title,
-            'organization': user.organization
+            'organization': user.organization,
+            'admin_user': user.is_staff
             }
         },
         status=200
@@ -122,7 +123,8 @@ def signup(request):
             'last_name': user.last_name,
             'email': user.email,
             'job_title': user.job_title,
-            'organization': user.organization
+            'organization': user.organization,
+            'admin_user': user.is_staff
             }
         },
         status=201
@@ -152,5 +154,67 @@ def logout(request):
     except Exception as e:
         logger.error(f'Logout error: {str(e)}')
         return Response({'message': 'Unexpected error while logging out'}, status=500)
+    
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def list_users(request):
+    try:
+        logger.info('Fetching list of users')
+        users = CfcUser.objects.all()
+        user_list = [
+            {
+                'username': user.username,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email,
+                'job_title': user.job_title,
+                'organization': user.organization,
+                'admin_user': user.is_staff
+            }
+            for user in users
+        ]
+        logger.info(f'Fetched {len(user_list)} users')
+        if not user_list:
+            return Response({'message': 'No users found'}, status=404)
+        return Response(user_list, status=200)
+    
+    except Exception as e:
+        logger.error(f'Error fetching users: {str(e)}')
+        return Response({'message': 'Unexpected error while fetching users'}, status=500)
 
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def add_user(request):
+    try:
+        email = request.query_params.get('email')
+        if not email:
+            return Response({'message': 'Email is required'}, status=400)
 
+        if ApprovedUser.objects.filter(email=email).exists():
+            return Response({'message': 'User already exists'}, status=400)
+
+        ApprovedUser.objects.create(email=email)
+        return Response({'message': 'User added successfully'}, status=201)
+    
+    except Exception as e:
+        logger.error(f'Error adding user: {str(e)}')
+        return Response({'message': 'Unexpected error while adding user'}, status=500)
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def deactivate_user(request):
+    try:
+        email = request.query_params.get('email')
+        if not email:
+            return Response({'message': 'Email is required'}, status=400)
+        try:
+            user = CfcUser.objects.get(email=email)
+            user.is_active = False
+            user.save()
+            return Response({'message': 'User deactivated successfully'}, status=200)
+        except ApprovedUser.DoesNotExist:
+            return Response({'message': 'User does not exist'}, status=404)
+    
+    except Exception as e:
+        logger.error(f'Error deactivating user: {str(e)}')
+        return Response({'message': 'Unexpected error while inactivating user'}, status=500)
